@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace EcommerceTeam5.Controllers
 {
@@ -32,7 +33,7 @@ namespace EcommerceTeam5.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT prodottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, CategoriaId FROM Prodotti;";
+                string query = "SELECT prodottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID;";
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -48,7 +49,8 @@ namespace EcommerceTeam5.Controllers
                                 Prezzo = reader.GetDecimal(3),
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
-                                Categoria = reader.GetInt32(6)
+                                CategoriaNome = reader.GetString(6),
+                                
                             });
                         }
                     }
@@ -58,16 +60,17 @@ namespace EcommerceTeam5.Controllers
             return View(productsList);
         }
 
+        // Azione per visualizzare i dettagli di un singolo prodotto
         [HttpGet("Product/{id}")]
         public async Task<IActionResult> Details(int id)
         {
             Product product = null;
 
-           
+            // Connessione al database per ottenere i dettagli del prodotto
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT prodottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, CategoriaId FROM Prodotti WHERE prodottoId = @Id;";
+                string query = "SELECT prodottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID WHERE prodottoId = @Id;";
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -85,13 +88,13 @@ namespace EcommerceTeam5.Controllers
                                 Prezzo = reader.GetDecimal(3),
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
-                                Categoria = reader.GetInt32(6)
+                                CategoriaNome = reader.GetString(6),
+                                
                             };
                         }
                     }
                 }
             }
-
             
             if (product == null)
             {

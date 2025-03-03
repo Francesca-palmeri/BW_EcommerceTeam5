@@ -1,0 +1,25 @@
+﻿@model Product
+
+
+
+<div class="row d-flex">
+    <h1>@Model.Nome</h1>
+    <img src="@Model.Immagine" alt="Immagine @Model.Nome" class="img-fluid my-2" style="max-width: 500px; max-height: 580px">
+    <p class="fs-5 my-2"><strong class="fs-5 my-2">Prezzo: </strong>@Model.Prezzo.ToString("C")</p>
+    <p class="fs-5 mb-2"><strong class="fs-5 mb-2">Descrizione: </strong>@Model.Descrizione</p>
+	<p>Categoria: @Model.CategoriaNome </p>
+	<p>Creato il: @Model.Creazione</p>
+</div>
+
+
+
+<!-- Modulo per aggiungere al carrello -->
+<form method="post" action="/Cart/AddToCart">
+    <input type="hidden" name="productId" value="@Model.Id" />
+    <input type="number" name="quantity" value="1" min="1" />
+    <button type="submit">Aggiungi al carrello</button>
+</form>
+<div>
+	<a href="@Url.Action("Index", "Articoli")" class="btn btn-danger mt-3">Torna alla Vetrina</a>
+</div>
+

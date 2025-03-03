@@ -13,6 +13,8 @@
         public string? Immagine { get; set; }
 
         public int Categoria { get; set; }  
+
+        public string? CategoriaNome { get; set; }
         
         public DateTime Creazione { get; set; }
     }
