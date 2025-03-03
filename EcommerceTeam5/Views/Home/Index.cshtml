@@ -1,8 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+	<h1 class="display-4">Welcome</h1>
+
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger" role="alert">
+			@TempData["Error"]
+		</div>
+	}
+
+	@if (Model != null && Model.Product != null)
+	{
+		@foreach (var product in Model.Product)
+		{
+			<div class="col-md-4">
+			<div class="card my-2 borderCarta" style="max-width: 450px">
+				<img class="card-img-top img-thumbnail p-1" src="@product.Immagine">
+				<div class="card-body">
+					<h5 class="card-title fw-bold fs-5">@product.Nome</h5>
+					<p class="card-text"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
+					<a href="@Url.Action("Dettaglio", "Articoli", new { id = product.Id })" class="btn btn-secondary px-4">Dettagli</a>
+				</div>
+			</div>
+		</div>
+		}
+	}
+	else
+	{
+		<p>Non ci sono prodotti</p>
+	}
+
+		
+		
+	
+
+
+   
 </div>
