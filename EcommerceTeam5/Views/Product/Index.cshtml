@@ -1,0 +1,44 @@
+﻿@model Magazzino;
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Welcome</h1>
+
+	@if (TempData["Error"] != null)
+	{
+		<div class="alert alert-danger" role="alert">
+			@TempData["Error"]
+		</div>
+	}
+
+	@if (Model != null && Model.Products != null)
+	{
+		foreach (var product in Model.Products)
+		{
+			<div class="col-md-4">
+				<div class="card my-2 " style="max-width: 450px">
+					<img class="card-img-top img-thumbnail p-1" src="@product.Immagine">
+					<div class="card-body">
+						<h5 class="card-title fw-bold fs-5">@product.Nome</h5>
+						<p class="card-text"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
+						
+					</div>
+				</div>
+			</div>
+		}
+	}
+	else
+	{
+		<p>Non ci sono prodotti</p>
+	}
+
+
+
+
+
+
+
+</div>
