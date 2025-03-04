@@ -50,7 +50,7 @@ namespace EcommerceTeam5.Controllers
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
                                 NomeCategoria = reader.GetString(6),
-                                
+
                             });
                         }
                     }
@@ -89,13 +89,13 @@ namespace EcommerceTeam5.Controllers
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
                                 NomeCategoria = reader.GetString(6),
-                                
+
                             };
                         }
                     }
                 }
             }
-            
+
             if (product == null)
             {
                 return NotFound();
@@ -103,7 +103,7 @@ namespace EcommerceTeam5.Controllers
 
             return View(product);
         }
-
+        //SEZIONE ADMIN 
         // GET: Mostra la pagina Admin con il form e la lista dei prodotti
         [HttpGet]
         public async Task<IActionResult> Admin()
@@ -113,9 +113,9 @@ namespace EcommerceTeam5.Controllers
             {
                 await connection.OpenAsync();
                 string query = @"
-                    SELECT p.ProdottoID, p.Nome, p.Descrizione, p.Prezzo, p.ImageURL, p.Creato, p.CategoriaID, c.NomeCategoria
-                    FROM Prodotti p
-                    INNER JOIN Categorie c ON p.CategoriaID = c.CategoriaID;";
+            SELECT p.ProdottoID, p.Nome, p.Descrizione, p.Prezzo, p.ImageURL, p.Creato, p.CategoriaID, c.NomeCategoria
+            FROM Prodotti p
+            INNER JOIN Categorie c ON p.CategoriaID = c.CategoriaID;";
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 await using (SqlDataReader reader = await command.ExecuteReaderAsync())
                 {
@@ -142,13 +142,8 @@ namespace EcommerceTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Admin(Product product)
         {
-            if (!ModelState.IsValid)
-            {
-                // Se ci sono errori, ricarica la view con la lista dei prodotti
-                return await Admin();
-            }
 
-            // Se Id Ã¨ 0, si tratta di una creazione
+            // Se Id è 0, si tratta di una creazione
             if (product.Id == 0)
             {
                 if (product.Creazione == DateTime.MinValue)
@@ -158,8 +153,8 @@ namespace EcommerceTeam5.Controllers
                 {
                     await connection.OpenAsync();
                     string query = @"
-                        INSERT INTO Prodotti (Nome, Descrizione, Prezzo, ImageURL, Creato, CategoriaID)
-                        VALUES (@Nome, @Descrizione, @Prezzo, @ImageURL, @Creato, @CategoriaID);";
+                INSERT INTO Prodotti (Nome, Descrizione, Prezzo, ImageURL, Creato, CategoriaID)
+                VALUES (@Nome, @Descrizione, @Prezzo, @ImageURL, @Creato, @CategoriaID);";
                     await using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nome", product.Nome);
@@ -179,14 +174,14 @@ namespace EcommerceTeam5.Controllers
                 {
                     await connection.OpenAsync();
                     string query = @"
-                        UPDATE Prodotti
-                        SET Nome = @Nome,
-                            Descrizione = @Descrizione,
-                            Prezzo = @Prezzo,
-                            ImageURL = @ImageURL,
-                            Creato = @Creato,
-                            CategoriaID = @CategoriaID
-                        WHERE ProdottoID = @Id;";
+                UPDATE Prodotti
+                SET Nome = @Nome,
+                    Descrizione = @Descrizione,
+                    Prezzo = @Prezzo,
+                    ImageURL = @ImageURL,
+                    Creato = @Creato,
+                    CategoriaID = @CategoriaID
+                WHERE ProdottoID = @Id;";
                     await using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Nome", product.Nome);
@@ -219,5 +214,6 @@ namespace EcommerceTeam5.Controllers
             }
             return RedirectToAction("Admin");
         }
+
     }
 }

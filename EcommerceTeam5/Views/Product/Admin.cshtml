@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Admin - Gestione Prodotti";
 }
+
 <h1>Admin - Gestione Prodotti</h1>
 
 <!-- Form per Creazione/Modifica -->
@@ -100,27 +101,27 @@
                     document.getElementById("Creazione").value = btn.getAttribute("data-creazione");
                     document.getElementById("CategoriaID").value = btn.getAttribute("data-categoriaid");
 
-                    document.getElementById("formTitle").innerText = "Modifica Prodotto";
-                    document.getElementById("submitBtn").innerText = "Salva Modifiche";
-                    document.getElementById("cancelEdit").style.display = "inline-block";
+                    document.getElementById("formTitle").textContent = "Modifica Prodotto";
+                    document.getElementById("submitBtn").textContent = "Salva Modifiche";
+                    document.getElementById("cancelEdit").style.display = "inline";
                 });
-            });
-
-            document.getElementById("cancelEdit").addEventListener("click", function () {
-                document.getElementById("productForm").reset();
-                document.getElementById("Id").value = "0";
-                document.getElementById("formTitle").innerText = "Crea Nuovo Prodotto";
-                document.getElementById("submitBtn").innerText = "Crea";
-                document.getElementById("cancelEdit").style.display = "none";
             });
 
             document.querySelectorAll(".btnDelete").forEach(function (btn) {
                 btn.addEventListener("click", function () {
-                    if (confirm("Sei sicuro di voler cancellare questo prodotto?")) {
+                    if (confirm("Sei sicuro di voler eliminare questo prodotto?")) {
                         document.getElementById("deleteId").value = btn.getAttribute("data-id");
                         document.getElementById("deleteForm").submit();
                     }
                 });
+            });
+
+            document.getElementById("cancelEdit").addEventListener("click", function () {
+                document.getElementById("Id").value = "0";
+                document.getElementById("productForm").reset();
+                document.getElementById("formTitle").textContent = "Crea Nuovo Prodotto";
+                document.getElementById("submitBtn").textContent = "Crea";
+                document.getElementById("cancelEdit").style.display = "none";
             });
         });
     </script>
