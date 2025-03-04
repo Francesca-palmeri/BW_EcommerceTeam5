@@ -32,7 +32,13 @@
         </div>
         <div class="form-group">
             <label for="CategoriaID">Categoria</label>
-            <input type="number" name="CategoriaID" id="CategoriaID" class="form-control" required />
+            <select name="CategoriaID" id="CategoriaID" class="form-control" required >
+                <option value="0" > Seleziona Categoria</option>
+                <option value="1">Bracciali</option>
+                <option value="2">Anelli</option>
+                <option value="3">Collane</option>
+                <option value="4">Altro</option>
+                </select>
         </div>
         <button type="submit" class="btn btn-primary" id="submitBtn">Crea</button>
         <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;">Annulla Modifica</button>
@@ -47,6 +53,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Immagine</th>
                 <th>Nome</th>
                 <th>Descrizione</th>
                 <th>Prezzo</th>
@@ -58,6 +65,9 @@
             @foreach (var prod in Model.Products)
             {
                 <tr>
+                    <td>
+                        <img src=@prod.Immagine alt=@prod.NomeCategoria width="50" height="50"/>
+                    </td>
                     <td>@prod.Nome</td>
                     <td>@prod.Descrizione</td>
                     <td>@prod.Prezzo.ToString("C")</td>

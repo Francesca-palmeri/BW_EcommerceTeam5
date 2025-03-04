@@ -1,5 +1,6 @@
 ﻿@model Magazzino;
 
+
 @{
 	ViewData["Title"] = "Home Page";
 }
@@ -24,6 +25,11 @@
 					<div class="card-body">
 						<h5 class="card-title fw-bold fs-5">@product.Nome</h5>
 						<p class="card-text"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
+						<form method="post" asp-controller="Cart" asp-action="Aggiungi">
+							<input type="hidden" name="prodottoId" value="@product.Id" />
+							<input type="number" name="quantity" value="1" min="1" />
+							<button type="submit">Aggiungi al carrello</button>
+						</form>
 						<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-secondary px-4">Dettagli</a>
 					</div>
 				</div>
@@ -34,11 +40,5 @@
 	{
 		<p>Non ci sono prodotti</p>
 	}
-
-
-
-
-
-
 
 </div>

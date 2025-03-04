@@ -17,7 +17,7 @@ namespace EcommerceTeam5.Controllers
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        // 1. Visualizza il carrello di un utente specifico
+        // Visualizza il carrello di un utente specifico
         public async Task<IActionResult> Index(int? utenteId)
         {
             if (utenteId == null)
@@ -61,7 +61,7 @@ namespace EcommerceTeam5.Controllers
             return View(cartItems);
         }
 
-        // 2. Aggiungere un prodotto al carrello
+        // Aggiungere un prodotto al carrello
         public async Task<IActionResult> Aggiungi(int prodottoId, int quantita = 1)
         {
             int utenteId = await EnsureUserExists();
@@ -92,7 +92,7 @@ namespace EcommerceTeam5.Controllers
             return RedirectToAction("Index", new { utenteId });
         }
 
-        // 3. Rimuovere un prodotto dal carrello
+        // Rimuovere un prodotto dal carrello
         public async Task<IActionResult> Rimuovi(int carrelloId, int utenteId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -110,7 +110,7 @@ namespace EcommerceTeam5.Controllers
             return RedirectToAction("Index", new { utenteId });
         }
 
-        // 4. Svuotare il carrello
+        // Svuotare il carrello
         public async Task<IActionResult> SvuotaCarrello(int utenteId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -128,7 +128,7 @@ namespace EcommerceTeam5.Controllers
             return RedirectToAction("Index", new { utenteId });
         }
 
-        // 5. Conferma il carrello e crea un ordine
+        // Conferma il carrello e crea un ordine
         public async Task<IActionResult> ConfermaOrdine(int? utenteId)
         {
             if (utenteId == null)

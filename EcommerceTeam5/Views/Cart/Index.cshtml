@@ -51,5 +51,7 @@ else
         <a asp-controller="Cart" asp-action="ConfermaOrdine" asp-route-utenteId="@Model.First().UtenteID" class="btn btn-success">
             ✅ Conferma Ordine
         </a>
+        <a href="@Url.Action("Index", "Product")" class="btn bg-transparent">🔙Torna alla Vetrina</a>
     </div>
+    
 }
