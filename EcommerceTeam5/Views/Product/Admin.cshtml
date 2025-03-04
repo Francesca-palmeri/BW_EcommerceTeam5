@@ -1,4 +1,127 @@
-﻿
+﻿@model EcommerceTeam5.Models.Magazzino
+
 @{
-	ViewData["Title"] = "Admin";
+    ViewData["Title"] = "Admin - Gestione Prodotti";
+}
+<h1>Admin - Gestione Prodotti</h1>
+
+<!-- Form per Creazione/Modifica -->
+<div id="createEditSection">
+    <h2 id="formTitle">Crea Nuovo Prodotto</h2>
+    <form id="productForm" asp-action="Admin" method="post">
+        <input type="hidden" name="Id" id="Id" value="0" />
+        <div class="form-group">
+            <label for="Nome">Nome</label>
+            <input type="text" name="Nome" id="Nome" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="Descrizione">Descrizione</label>
+            <textarea name="Descrizione" id="Descrizione" class="form-control" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="Prezzo">Prezzo</label>
+            <input type="number" name="Prezzo" id="Prezzo" class="form-control" step="0.01" required />
+        </div>
+        <div class="form-group">
+            <label for="Immagine">Immagine (URL)</label>
+            <input type="text" name="Immagine" id="Immagine" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="Creazione">Data Creazione</label>
+            <input type="datetime-local" name="Creazione" id="Creazione" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="CategoriaID">Categoria</label>
+            <input type="number" name="CategoriaID" id="CategoriaID" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Crea</button>
+        <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;">Annulla Modifica</button>
+    </form>
+</div>
+
+<hr />
+
+<!-- Griglia Prodotti -->
+<div>
+    <h2>Lista Prodotti</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrizione</th>
+                <th>Prezzo</th>
+                <th>Categoria</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prod in Model.Products)
+            {
+                <tr>
+                    <td>@prod.Nome</td>
+                    <td>@prod.Descrizione</td>
+                    <td>@prod.Prezzo.ToString("C")</td>
+                    <td>@prod.NomeCategoria</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btnEdit"
+                                data-id="@prod.Id"
+                                data-nome="@prod.Nome"
+                                data-descrizione="@prod.Descrizione"
+                                data-prezzo="@prod.Prezzo"
+                                data-immagine="@prod.Immagine"
+                                data-creazione="@prod.Creazione.ToString("yyyy-MM-ddTHH:mm")"
+                                data-categoriaid="@prod.CategoriaID">
+                            Modifica
+                        </button>
+                        <button type="button" class="btn btn-danger btnDelete" data-id="@prod.Id">
+                            Cancella
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<form id="deleteForm" asp-action="AdminDelete" method="post" style="display:none;">
+    <input type="hidden" name="Id" id="deleteId" />
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".btnEdit").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    document.getElementById("Id").value = btn.getAttribute("data-id");
+                    document.getElementById("Nome").value = btn.getAttribute("data-nome");
+                    document.getElementById("Descrizione").value = btn.getAttribute("data-descrizione");
+                    document.getElementById("Prezzo").value = btn.getAttribute("data-prezzo");
+                    document.getElementById("Immagine").value = btn.getAttribute("data-immagine");
+                    document.getElementById("Creazione").value = btn.getAttribute("data-creazione");
+                    document.getElementById("CategoriaID").value = btn.getAttribute("data-categoriaid");
+
+                    document.getElementById("formTitle").innerText = "Modifica Prodotto";
+                    document.getElementById("submitBtn").innerText = "Salva Modifiche";
+                    document.getElementById("cancelEdit").style.display = "inline-block";
+                });
+            });
+
+            document.getElementById("cancelEdit").addEventListener("click", function () {
+                document.getElementById("productForm").reset();
+                document.getElementById("Id").value = "0";
+                document.getElementById("formTitle").innerText = "Crea Nuovo Prodotto";
+                document.getElementById("submitBtn").innerText = "Crea";
+                document.getElementById("cancelEdit").style.display = "none";
+            });
+
+            document.querySelectorAll(".btnDelete").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    if (confirm("Sei sicuro di voler cancellare questo prodotto?")) {
+                        document.getElementById("deleteId").value = btn.getAttribute("data-id");
+                        document.getElementById("deleteForm").submit();
+                    }
+                });
+            });
+        });
+    </script>
 }

@@ -7,15 +7,16 @@
     <img src="@Model.Immagine" alt="Immagine @Model.Nome" class="img-fluid my-2" style="max-width: 500px; max-height: 580px">
     <p class="fs-5 my-2"><strong class="fs-5 my-2">Prezzo: </strong>@Model.Prezzo.ToString("C")</p>
     <p class="fs-5 mb-2"><strong class="fs-5 mb-2">Descrizione: </strong>@Model.Descrizione</p>
-	<p>Categoria: @Model.CategoriaNome </p>
+	<p>Categoria: @Model.NomeCategoria </p>
 	<p>Creato il: @Model.Creazione</p>
 </div>
 
 
 
 <!-- Modulo per aggiungere al carrello -->
-<form method="post" asp-controller="Cart" asp-action="AddToCart" >
-    <input type="hidden" name="productId" value="@Model.Id" />
+<form method="post" asp-controller="Cart" asp-action="Aggiungi">
+    <input type="hidden" name="prodottoId" value="@Model.Id" />
+    @Html.HiddenFor(model => model.Id) <!-- Aggiunto per sicurezza -->
     <input type="number" name="quantity" value="1" min="1" />
     <button type="submit">Aggiungi al carrello</button>
 </form>

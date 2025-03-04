@@ -33,7 +33,7 @@ namespace EcommerceTeam5.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT prodottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID;";
+                string query = "SELECT ProdottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID;";
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -49,7 +49,7 @@ namespace EcommerceTeam5.Controllers
                                 Prezzo = reader.GetDecimal(3),
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
-                                CategoriaNome = reader.GetString(6),
+                                NomeCategoria = reader.GetString(6),
                                 
                             });
                         }
@@ -70,7 +70,7 @@ namespace EcommerceTeam5.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT prodottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID WHERE prodottoId = @Id;";
+                string query = "SELECT ProdottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID WHERE ProdottoId = @Id;";
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -88,7 +88,7 @@ namespace EcommerceTeam5.Controllers
                                 Prezzo = reader.GetDecimal(3),
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
-                                CategoriaNome = reader.GetString(6),
+                                NomeCategoria = reader.GetString(6),
                                 
                             };
                         }
@@ -104,102 +104,120 @@ namespace EcommerceTeam5.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> Cart(int utenteId)
+        // GET: Mostra la pagina Admin con il form e la lista dei prodotti
+        [HttpGet]
+        public async Task<IActionResult> Admin()
         {
-            var carrello = new Carrello
-            {
-                Products = new List<Product>()
-            };
-
+            var magazzino = new Magazzino { Products = new List<Product>() };
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string query = @"
-            SELECT p.prodottoId, p.Nome, p.Descrizione, p.Prezzo, p.ImageURL, c.TotaleCarrello
-            FROM Carrello c
-            INNER JOIN Prodotti p ON c.UtenteID = @UtenteId AND c.OrdineID IS NULL
-            INNER JOIN Ordini o ON c.OrdineID = o.OrdineID
-            WHERE c.UtenteID = @UtenteId";
-
+                    SELECT p.ProdottoID, p.Nome, p.Descrizione, p.Prezzo, p.ImageURL, p.Creato, p.CategoriaID, c.NomeCategoria
+                    FROM Prodotti p
+                    INNER JOIN Categorie c ON p.CategoriaID = c.CategoriaID;";
                 await using (SqlCommand command = new SqlCommand(query, connection))
+                await using (SqlDataReader reader = await command.ExecuteReaderAsync())
                 {
-                    command.Parameters.AddWithValue("@UtenteId", utenteId);
-
-                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    while (await reader.ReadAsync())
                     {
-                        while (await reader.ReadAsync())
+                        magazzino.Products.Add(new Product
                         {
-                            carrello.Products.Add(new Product()
-                            {
-                                Id = reader.GetInt32(0),
-                                Nome = reader.GetString(1),
-                                Descrizione = reader.GetString(2),
-                                Prezzo = reader.GetDecimal(3),
-                                Immagine = reader.GetString(4)
-                            });
-                            carrello.TotaleCarrello = reader.GetDecimal(5);
-                        }
+                            Id = reader.GetInt32(0),
+                            Nome = reader.GetString(1),
+                            Descrizione = reader.GetString(2),
+                            Prezzo = reader.GetDecimal(3),
+                            Immagine = reader.GetString(4),
+                            Creazione = reader.GetDateTime(5),
+                            CategoriaID = reader.GetInt32(6),
+                            NomeCategoria = reader.GetString(7)
+                        });
                     }
                 }
             }
-
-            return View(carrello);
+            return View(magazzino);
         }
 
+        // POST: Gestisce sia la creazione che la modifica, in base al valore dell'Id
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int id)
+        public async Task<IActionResult> Admin(Product product)
         {
-            int utenteId = 1; // Puoi ottenere l'utente ID dal sistema di autenticazione se esistente
+            if (!ModelState.IsValid)
+            {
+                // Se ci sono errori, ricarica la view con la lista dei prodotti
+                return await Admin();
+            }
 
-            // Connessione al database per aggiungere il prodotto al carrello
+            // Se Id Ã¨ 0, si tratta di una creazione
+            if (product.Id == 0)
+            {
+                if (product.Creazione == DateTime.MinValue)
+                    product.Creazione = DateTime.Now;
+
+                await using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    string query = @"
+                        INSERT INTO Prodotti (Nome, Descrizione, Prezzo, ImageURL, Creato, CategoriaID)
+                        VALUES (@Nome, @Descrizione, @Prezzo, @ImageURL, @Creato, @CategoriaID);";
+                    await using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Nome", product.Nome);
+                        command.Parameters.AddWithValue("@Descrizione", product.Descrizione);
+                        command.Parameters.AddWithValue("@Prezzo", product.Prezzo);
+                        command.Parameters.AddWithValue("@ImageURL", product.Immagine ?? "");
+                        command.Parameters.AddWithValue("@Creato", product.Creazione);
+                        command.Parameters.AddWithValue("@CategoriaID", product.CategoriaID);
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            else
+            {
+                // Altrimenti, si tratta di una modifica
+                await using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    string query = @"
+                        UPDATE Prodotti
+                        SET Nome = @Nome,
+                            Descrizione = @Descrizione,
+                            Prezzo = @Prezzo,
+                            ImageURL = @ImageURL,
+                            Creato = @Creato,
+                            CategoriaID = @CategoriaID
+                        WHERE ProdottoID = @Id;";
+                    await using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Nome", product.Nome);
+                        command.Parameters.AddWithValue("@Descrizione", product.Descrizione);
+                        command.Parameters.AddWithValue("@Prezzo", product.Prezzo);
+                        command.Parameters.AddWithValue("@ImageURL", product.Immagine ?? "");
+                        command.Parameters.AddWithValue("@Creato", product.Creazione);
+                        command.Parameters.AddWithValue("@CategoriaID", product.CategoriaID);
+                        command.Parameters.AddWithValue("@Id", product.Id);
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            return RedirectToAction("Admin");
+        }
+
+        // POST: Gestisce la cancellazione del prodotto
+        [HttpPost]
+        public async Task<IActionResult> AdminDelete(int Id)
+        {
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-
-                // Controlla se esiste giÃ un carrello aperto per l'utente
-                string checkCartQuery = "SELECT CarrelloID FROM Carrello WHERE UtenteID = @UtenteId AND OrdineID IS NULL;";
-                int carrelloId;
-
-                await using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
+                string query = "DELETE FROM Prodotti WHERE ProdottoID = @Id;";
+                await using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    checkCartCommand.Parameters.AddWithValue("@UtenteId", utenteId);
-                    var result = await checkCartCommand.ExecuteScalarAsync();
-
-                    if (result == null)
-                    {
-                        // Se non esiste, crea un nuovo carrello
-                        string createCartQuery = "INSERT INTO Carrello (UtenteID, NumeroProdotti, TotaleCarrello) OUTPUT INSERTED.CarrelloID VALUES (@UtenteId, 0, 0);";
-                        await using (SqlCommand createCartCommand = new SqlCommand(createCartQuery, connection))
-                        {
-                            createCartCommand.Parameters.AddWithValue("@UtenteId", utenteId);
-                            carrelloId = (int)await createCartCommand.ExecuteScalarAsync();
-                        }
-                    }
-                    else
-                    {
-                        carrelloId = (int)result;
-                    }
-                }
-
-                // Aggiungi il prodotto al carrello
-                string addToCartQuery = @"
-            UPDATE Carrello 
-            SET NumeroProdotti = NumeroProdotti + 1, TotaleCarrello = TotaleCarrello + (SELECT Prezzo FROM Prodotti WHERE prodottoId = @ProdottoId) 
-            WHERE CarrelloID = @CarrelloID;
-        ";
-
-                await using (SqlCommand addToCartCommand = new SqlCommand(addToCartQuery, connection))
-                {
-                    addToCartCommand.Parameters.AddWithValue("@ProdottoId", id);
-                    addToCartCommand.Parameters.AddWithValue("@CarrelloID", carrelloId);
-                    await addToCartCommand.ExecuteNonQueryAsync();
+                    command.Parameters.AddWithValue("@Id", Id);
+                    await command.ExecuteNonQueryAsync();
                 }
             }
-
-            // Reindirizza alla pagina del carrello
-            return RedirectToAction("Cart", new { utenteId = utenteId });
-        
-
-    }
+            return RedirectToAction("Admin");
+        }
     }
 }
