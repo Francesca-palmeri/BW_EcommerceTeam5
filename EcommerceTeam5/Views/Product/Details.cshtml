@@ -14,7 +14,7 @@
 
 
 <!-- Modulo per aggiungere al carrello -->
-<form method="post" action="/Cart/AddToCart">
+<form method="post" asp-controller="Cart" asp-action="AddToCart" >
     <input type="hidden" name="productId" value="@Model.Id" />
     <input type="number" name="quantity" value="1" min="1" />
     <button type="submit">Aggiungi al carrello</button>

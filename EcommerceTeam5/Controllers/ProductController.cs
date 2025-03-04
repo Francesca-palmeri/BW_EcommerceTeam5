@@ -103,5 +103,103 @@ namespace EcommerceTeam5.Controllers
 
             return View(product);
         }
+
+        public async Task<IActionResult> Cart(int utenteId)
+        {
+            var carrello = new Carrello
+            {
+                Products = new List<Product>()
+            };
+
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"
+            SELECT p.prodottoId, p.Nome, p.Descrizione, p.Prezzo, p.ImageURL, c.TotaleCarrello
+            FROM Carrello c
+            INNER JOIN Prodotti p ON c.UtenteID = @UtenteId AND c.OrdineID IS NULL
+            INNER JOIN Ordini o ON c.OrdineID = o.OrdineID
+            WHERE c.UtenteID = @UtenteId";
+
+                await using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@UtenteId", utenteId);
+
+                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            carrello.Products.Add(new Product()
+                            {
+                                Id = reader.GetInt32(0),
+                                Nome = reader.GetString(1),
+                                Descrizione = reader.GetString(2),
+                                Prezzo = reader.GetDecimal(3),
+                                Immagine = reader.GetString(4)
+                            });
+                            carrello.TotaleCarrello = reader.GetDecimal(5);
+                        }
+                    }
+                }
+            }
+
+            return View(carrello);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            int utenteId = 1; // Puoi ottenere l'utente ID dal sistema di autenticazione se esistente
+
+            // Connessione al database per aggiungere il prodotto al carrello
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Controlla se esiste giÃ un carrello aperto per l'utente
+                string checkCartQuery = "SELECT CarrelloID FROM Carrello WHERE UtenteID = @UtenteId AND OrdineID IS NULL;";
+                int carrelloId;
+
+                await using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
+                {
+                    checkCartCommand.Parameters.AddWithValue("@UtenteId", utenteId);
+                    var result = await checkCartCommand.ExecuteScalarAsync();
+
+                    if (result == null)
+                    {
+                        // Se non esiste, crea un nuovo carrello
+                        string createCartQuery = "INSERT INTO Carrello (UtenteID, NumeroProdotti, TotaleCarrello) OUTPUT INSERTED.CarrelloID VALUES (@UtenteId, 0, 0);";
+                        await using (SqlCommand createCartCommand = new SqlCommand(createCartQuery, connection))
+                        {
+                            createCartCommand.Parameters.AddWithValue("@UtenteId", utenteId);
+                            carrelloId = (int)await createCartCommand.ExecuteScalarAsync();
+                        }
+                    }
+                    else
+                    {
+                        carrelloId = (int)result;
+                    }
+                }
+
+                // Aggiungi il prodotto al carrello
+                string addToCartQuery = @"
+            UPDATE Carrello 
+            SET NumeroProdotti = NumeroProdotti + 1, TotaleCarrello = TotaleCarrello + (SELECT Prezzo FROM Prodotti WHERE prodottoId = @ProdottoId) 
+            WHERE CarrelloID = @CarrelloID;
+        ";
+
+                await using (SqlCommand addToCartCommand = new SqlCommand(addToCartQuery, connection))
+                {
+                    addToCartCommand.Parameters.AddWithValue("@ProdottoId", id);
+                    addToCartCommand.Parameters.AddWithValue("@CarrelloID", carrelloId);
+                    await addToCartCommand.ExecuteNonQueryAsync();
+                }
+            }
+
+            // Reindirizza alla pagina del carrello
+            return RedirectToAction("Cart", new { utenteId = utenteId });
+        
+
+    }
     }
 }
