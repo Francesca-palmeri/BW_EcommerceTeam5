@@ -142,13 +142,7 @@ namespace EcommerceTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Admin(Product product)
         {
-            if (!ModelState.IsValid)
-            {
-                // Se ci sono errori, ricarica la view con la lista dei prodotti
-                return await Admin();
-            }
-
-            // Se Id Ã¨ 0, si tratta di una creazione
+            //Se l'Id è 0, si tratta di una creazione
             if (product.Id == 0)
             {
                 if (product.Creazione == DateTime.MinValue)
@@ -171,6 +165,7 @@ namespace EcommerceTeam5.Controllers
                         await command.ExecuteNonQueryAsync();
                     }
                 }
+                
             }
             else
             {
@@ -200,10 +195,11 @@ namespace EcommerceTeam5.Controllers
                     }
                 }
             }
-            return RedirectToAction("Admin");
+             return RedirectToAction("Admin");
+            
         }
 
-        // POST: Gestisce la cancellazione del prodotto
+        
         [HttpPost]
         public async Task<IActionResult> AdminDelete(int Id)
         {
