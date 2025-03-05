@@ -1,0 +1,13 @@
+﻿
+
+#stiky-nav {
+    position: sticky !important;
+    top: auto !important;
+    z-index: 1000 !important;
+}
+.btn-color {
+    background-color: antiquewhite ;
+}
+.bg-img {
+    background-color: black   ;
+}
