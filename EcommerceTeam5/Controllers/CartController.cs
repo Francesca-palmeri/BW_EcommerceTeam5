@@ -26,6 +26,7 @@ namespace EcommerceTeam5.Controllers
             }
 
             var cartItems = new List<CartItem>();
+            decimal totaleCarrello = 0;
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -43,7 +44,7 @@ namespace EcommerceTeam5.Controllers
                     {
                         while (await reader.ReadAsync())
                         {
-                            cartItems.Add(new CartItem()
+                            var item = new CartItem()
                             {
                                 CarrelloID = reader.GetInt32(0),
                                 UtenteID = reader.GetInt32(1),
@@ -51,12 +52,16 @@ namespace EcommerceTeam5.Controllers
                                 NomeProdotto = reader.GetString(3),
                                 ImmagineProdotto = reader.GetString(4),
                                 Prezzo = reader.GetDecimal(5),
-                                Quantita = reader.GetInt32(6)
-                            });
+                                Quantita = reader.GetInt32(6),
+                            };
+
+                            cartItems.Add(item);
+                            totaleCarrello += item.Prezzo * item.Quantita;
                         }
                     }
                 }
             }
+            ViewData["TotaleCarrello"] = totaleCarrello; // Passa il totale alla view
 
             return View(cartItems);
         }

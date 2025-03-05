@@ -1,5 +1,7 @@
 html {
   font-size: 14px;
+  min-width: 100vh;
+  
 }
 
 @media (min-width: 768px) {
@@ -13,10 +15,18 @@ html {
 }
 
 html {
-  position: relative;
+ 
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+
+
+.BackgroundHome {
+    background-image: url(https://nove25.kleecks-cdn.com/img/cms/home%20page/2025/mar/impulse_d.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;  
+    height: 500px;
+
+    
 }
