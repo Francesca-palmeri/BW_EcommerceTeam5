@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Il tuo Carrello";
 }
 
-<h2 class="text-center">🛒 Il tuo Carrello</h2>
+<h2 class="text-center m-4"> CARRELLO</h2>
 
 @if (Model.Count == 0)
 {
@@ -13,7 +13,7 @@
 else
 {
 	<div class="row">
-		<div class="col-7">
+		<div class="col-sm-12 col-lg-7" >
 			<table class="table ">
 				<thead class="thead-dark">
 					<tr class="text-center">
@@ -35,6 +35,7 @@ else
 							<td>@item.NomeProdotto</td>
 							<td>@item.Prezzo €</td>
 							<td>@item.Quantita</td>
+							
 							<td>@(item.Totale) €</td>
 							<td>
 								<a asp-controller="Cart" asp-action="Rimuovi" asp-route-carrelloId="@item.CarrelloID" asp-route-utenteId="@item.UtenteID" class="btn btn-danger btn-sm">
@@ -46,7 +47,7 @@ else
 				</tbody>
 			</table>
 		</div>
-		<div class="col-4">
+		<div class=" col-sm-12 col-lg-4">
 			<table class="table">
 				<thead>
 					<tr>
@@ -60,11 +61,106 @@ else
 				</tbody>
 			</table>
 		</div>
-    
-   
+	</div>
+
+
+    <div class="container mt-4">
+        <h5>Completa il tuo regalo</h5>
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="card h-100">
+                                <img src="https://nove25.kleecks-cdn.com/13339-home_default/biglietto-d-auguri-game.jpg" class="card-img-top" alt="Prodotto 1">
+                                <div class="card-body">
+                                    <p class="card-text">BIGLIETTO D'AUGURI / GAME</p>
+                                    <p>3,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="card">
+                                <img src="https://nove25.kleecks-cdn.com/10157-home_default/biglietto-nostalgic-merry-christmas.jpg" class="card-img-top" alt="Prodotto 2">
+                                <div class="card-body">
+                                    <p class="card-text">BIGLIETTO NOSTALGIC / MERRY CHRISTMAS</p>
+                                    <p>3,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 d-none d-xl-block">
+                            <div class="card h-100">
+                                <img src="https://nove25.kleecks-cdn.com/12113-home_default/shopper-nove25-grumetta.jpg" class="card-img-top" alt="Prodotto 3">
+                                <div class="card-body">
+                                    <p class="card-text">SHOPPER NOVE25 GRUMETTA</p>
+                                    <p>20,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 d-none d-xl-block">
+                            <div class="card h-100">
+                                <img src="https://nove25.kleecks-cdn.com/12117-home_default/shopper-nove25-smile.jpg" class="card-img-top" alt="Prodotto 4">
+                                <div class="card-body">
+                                    <p class="card-text">SHOPPER NOVE25 SMILE</p>
+                                    <p>20,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row">
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="card h-100">
+                                <img src="https://nove25.kleecks-cdn.com/11753-home_default/confezione-regalo.jpg" class="card-img-top" alt="Prodotto 5">
+                                <div class="card-body">
+                                    <p class="card-text">CONFEZIONE REGALO</p>
+                                    <p>4.50 €</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="card h-100">
+                                <img src="https://nove25.kleecks-cdn.com/13334-home_default/biglietto-d-auguri-love.jpg" class="card-img-top" alt="Prodotto 6">
+                                <div class="card-body">
+                                    <p class="card-text">BIGLIETTO D'AUGURI/LOVE</p>
+                                    <p>3,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 d-none d-xl-block">
+                            <div class="card h-100">
+                                <img src="https://nove25.kleecks-cdn.com/11181-home_default/busta-per-biglietto-it-s-a-present.jpg" class="card-img-top" alt="Prodotto 7">
+                                <div class="card-body">
+                                    <p class="card-text">BUSTA PER BIGLIETTO </p>
+                                    <p>2,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 d-none d-xl-block">
+                            <div class="card ">
+                                <img src="https://nove25.kleecks-cdn.com/13336-home_default/biglietto-d-auguri-friendship.jpg" class="card-img-top" alt="Prodotto 8">
+                                <div class="card-body">
+                                    <p class="card-text">BIGLIETTO AUGURI/ FRIENDSHIP</p>
+                                    <p>3,00 €</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+        </div>
     </div>
 
-    <div class="text-center">
+
+    <div class="text-center my-3">
         <a asp-controller="Cart" asp-action="SvuotaCarrello" asp-route-utenteId="@Model.First().UtenteID" class="btn btn-warning">
             🗑 Svuota Carrello
         </a>

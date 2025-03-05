@@ -1,68 +1,109 @@
 ﻿@model Magazzino;
 
-
 @{
 	ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-	<h1 class="display-4">Gioielli</h1>
+	<h1 class="display-4 my-3">Gioielli</h1>
+	<h4 class="mt-2">ANELLI, COLLANE E BRACCIALI</h4>
+	<div class="my-3 p-1">
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">GIOIELLI DA UOMO</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">COLLANE</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">ANELLI PERSONALIZZATI</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">FEDI</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">CHEVALIER</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">CHARM</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">BRACCIALI</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn">ANELLI DA MIGNOLO</button>
+	</div>
 	
-	@if (TempData["Error"] != null)
-	{
-		<div class="alert alert-danger" role="alert">
-			@TempData["Error"]
-		</div>
-	}
-	
+	<h2 class="m-3 py-2">Best Seller</h2>
 
-	@if (Model != null && Model.Products != null)
-	{
-		<div class="row">
+	<div id="productCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel">
+		<div class="carousel-inner">
+			@if (Model?.Products != null && Model.Products.Any())
+			{
+				int total = Model.Products.Count;
+				int groups = (int)Math.Ceiling(total / 4.0);
+				for (int groupIndex = 0; groupIndex < groups; groupIndex++)
+				{
+					<div class="carousel-item @(groupIndex == 0 ? "active" : "")">
+						<div class="row ms-3">
+							@for (int productIndex = groupIndex * 4; productIndex < (groupIndex * 4 + 4) && productIndex < total; productIndex++)
+							{
+								var product = Model.Products[productIndex];
+								<div class="col-md-3 p-1">
+									<div class="card px-0 my-2 border-0" style="max-width: 300px">
+										<img class="card-img-top img-thumbnail p-0" src="@product.Immagine" alt="@product.Nome" />
+										<div class="card-body p-1">
+											<h5 class="card-title fw-bold fs-5">@product.Nome</h5>
+											<div class="d-flex">
+												<p class="card-text pt-1"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
+												<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-color py-1 ms-3">Dettagli</a>
+											</div>
+											<form method="post" asp-controller="Cart" asp-action="Aggiungi">
+												<input type="hidden" name="prodottoId" value="@product.Id" />
+												<input type="number" name="quantita" value="1" min="1" id="quantita-@product.Id" />
+												<button type="submit">Aggiungi al carrello</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
+				}
+			}
+		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>
+
+	<hr class="my-4"/>
+
+	<h2 class="mb-3">
+		I NOSTRI PRODOTTI
+	</h2>
+
+	<div class="row ms-4 mt-3">
+		@if (Model?.Products != null && Model.Products.Any())
+		{
 			@foreach (var product in Model.Products)
 			{
-				<div class="col-md-3 p-1">
-					
-					<div class="card my-2 border-0 " style="max-width: 450px">
-						<img class="card-img-top img-thumbnail p-0 " src="@product.Immagine">
+				<div class="col-md-3">
+					<div class="card my-2 border-0" style="max-width: 350px">
+						<img class="card-img-top img-thumbnail p-0" src="@product.Immagine" />
 						<div class="card-body p-1">
-							<h5 class=" text-start card-title fw-bold fs-5">@product.Nome</h5>
-							<div class="d-flex ">
+							<h5 class="text-start card-title fw-bold fs-5">@product.Nome</h5>
+							<div class="d-flex">
 								<div>
-									<p class="card-text pt-1 "><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
+									<p class="card-text pt-1"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
 								</div>
 								<div>
-							<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-color py-1  ms-3 ">Dettagli</a>
+									<form method="post" asp-controller="Cart" asp-action="Aggiungi">
+										<input type="hidden" name="prodottoId" value="@product.Id" />
+										<input type="number" name="quantita" value="1" min="1" id="quantita-@product.Id" />
+										<button type="submit">Aggiungi al carrello</button>
+									</form>
+									<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-color py-1 ms-3">Dettagli</a>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			}
-		</div>
-
-		foreach (var product in Model.Products)
-		{
-			<div class="col-md-4">
-				<div class="card my-2 " style="max-width: 450px">
-					<img class="card-img-top img-thumbnail p-1" src="@product.Immagine">
-					<div class="card-body">
-						<h5 class="card-title fw-bold fs-5">@product.Nome</h5>
-						<p class="card-text"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
-						<form method="post" asp-controller="Cart" asp-action="Aggiungi">
-							<input type="hidden" name="prodottoId" value="@product.Id" />
-							<input type="number" name="quantity" value="1" min="1" />
-							<button type="submit">Aggiungi al carrello</button>
-						</form>
-						<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-secondary px-4">Dettagli</a>
-					</div>
-				</div>
-			</div>
 		}
-	}
-	else
-	{
-		<p>Non ci sono prodotti</p>
-	}
-
+		else
+		{
+			<p>Non ci sono prodotti</p>
+		}
+	</div>
 </div>
+

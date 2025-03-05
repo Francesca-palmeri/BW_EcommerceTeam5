@@ -67,7 +67,7 @@ namespace EcommerceTeam5.Controllers
         }
 
         // Aggiungere un prodotto al carrello
-        public async Task<IActionResult> Aggiungi(int prodottoId, int quantita = 1)
+        public async Task<IActionResult> Aggiungi(int prodottoId, int quantita)
         {
             int utenteId = await EnsureUserExists();
 
@@ -96,6 +96,8 @@ namespace EcommerceTeam5.Controllers
 
             return RedirectToAction("Index", new { utenteId });
         }
+
+
 
         // Rimuovere un prodotto dal carrello
         public async Task<IActionResult> Rimuovi(int carrelloId, int utenteId)
@@ -132,6 +134,8 @@ namespace EcommerceTeam5.Controllers
 
             return RedirectToAction("Index", new { utenteId });
         }
+
+
 
         // Conferma il carrello e crea un ordine
         public async Task<IActionResult> ConfermaOrdine(int? utenteId)
