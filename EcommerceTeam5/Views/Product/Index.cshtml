@@ -6,17 +6,41 @@
 }
 
 <div class="text-center">
-	<h1 class="display-4">Welcome</h1>
-
+	<h1 class="display-4">Gioielli</h1>
+	
 	@if (TempData["Error"] != null)
 	{
 		<div class="alert alert-danger" role="alert">
 			@TempData["Error"]
 		</div>
 	}
+	
 
 	@if (Model != null && Model.Products != null)
 	{
+		<div class="row">
+			@foreach (var product in Model.Products)
+			{
+				<div class="col-md-3 p-1">
+					
+					<div class="card my-2 border-0 " style="max-width: 450px">
+						<img class="card-img-top img-thumbnail p-0 " src="@product.Immagine">
+						<div class="card-body p-1">
+							<h5 class=" text-start card-title fw-bold fs-5">@product.Nome</h5>
+							<div class="d-flex ">
+								<div>
+									<p class="card-text pt-1 "><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
+								</div>
+								<div>
+							<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-color py-1  ms-3 ">Dettagli</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+
 		foreach (var product in Model.Products)
 		{
 			<div class="col-md-4">
