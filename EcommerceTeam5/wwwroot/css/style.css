@@ -162,21 +162,25 @@
     z-index: 1000 !important;
 }
 
-.btn-color {
-    background-color: antiquewhite;
-}
 
 .bg-img {
     background-color: black;
 }
+.btn-color {
+    background-color: #F8F8F8 !important;
+}
 
+    .btn-color:hover {
+        background-color: black !important;
+        color: white !important;
+    }
 .product-btn:hover {
     background-color: black !important;
     color: white !important;
 }
 
 .add-product {
-    width: 30px;
+    width: 27px;
 }
 
 .btn-add:hover {
@@ -191,8 +195,9 @@
 /* Sposta le frecce un po' più in alto */
 .carousel-control-prev,
 .carousel-control-next {
-    top: -30%; /* Modifica questo valore a seconda delle tue necessità */
-    right: -7%;
+    top: 36%; /* Modifica questo valore a seconda delle tue necessità */
+    right: -9%;
+    height: 10px;
 }
 
 .carousel-control-prev {
@@ -204,21 +209,45 @@
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.borderOrder {
-    border: 1px solid #D2D2D2;
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
     background-color: white;
+    color: black;
 }
 
-.btn-color {
-    background-color: #F8F8F8 !important;
+.footer-column {
+    width: 22%;
 }
 
-.btn-color:hover {
-        background-color: black !important;
-        color: white !important;
-}
+    .footer-column h3 {
+        font-size: 1.2rem;
+        border-bottom: 2px solid black;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+    }
 
-/*CCS ADMIN PAGE*/
+    .footer-column ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .footer-column li {
+        margin: 5px 0;
+    }
+
+    .footer-column a {
+        color: black;
+        text-decoration: none;
+    }
+
+        .footer-column a:hover {
+            text-decoration: underline;
+        }
+
+/CCS ADMIN PAGE/
 
 .btnCrea {
     background-color: dimgray;
@@ -265,10 +294,9 @@
     letter-spacing: 0.2px;
 }
 
-.btn-details{
-    width: 200px;
-}
-/*csstabellaadmin*/
+
+/csstabellaadmin/
+
 .table-fixed {
     table-layout: fixed;
     width: 100%;
@@ -335,4 +363,3 @@
     padding: 10px;
     text-transform: uppercase;
 }
-
