@@ -1,29 +1,46 @@
 ﻿@model Magazzino;
 
-
 @{
 	ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-	<h1 class="display-4">Gioielli</h1>
-	
+	<h1 class="display-4 fs-1  mt-2">Gioielli</h1>
+	<div class="mt-3">
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn "> GIOIELLI DA UOMO</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn "> COLLANE</button>
+		<button class="btn border-1 border-dark rounded-0 p-1  px-2 m-2 product-btn "> ANELLI PERSONALIZZATI</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn "> FEDI</button>
+
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2  m-2 product-btn "> CHEVALIER</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn "> CHARM</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2  m-2 product-btn "> BRACCIALI</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2 m-2 product-btn "> ANELLI DA MIGNOLO</button>
+		<button class="btn border-1 border-dark rounded-0 p-1 px-2  m-2 product-btn "> ANELLI D'ORO</button>
+
+
+
+
+
+
+	</div>
+
 	@if (TempData["Error"] != null)
 	{
 		<div class="alert alert-danger" role="alert">
 			@TempData["Error"]
 		</div>
 	}
-	
+
 
 	@if (Model != null && Model.Products != null)
 	{
-		<div class="row">
+		<div class="row container-fluid">
 			@foreach (var product in Model.Products)
 			{
 				<div class="col-md-3 p-1">
-					
-					<div class="card my-2 border-0 " style="max-width: 450px">
+
+					<div class="card my-2 border-0 " style="max-width: 230px">
 						<img class="card-img-top img-thumbnail p-0 " src="@product.Immagine">
 						<div class="card-body p-1">
 							<h5 class=" text-start card-title fw-bold fs-5">@product.Nome</h5>
@@ -32,37 +49,33 @@
 									<p class="card-text pt-1 "><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
 								</div>
 								<div>
-							<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-color py-1  ms-3 ">Dettagli</a>
+
+									<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-color py-1  ms-3 ">Dettagli</a>
+
 								</div>
+
 							</div>
+							<form method="post" class="text-start" asp-controller="Cart" asp-action="Aggiungi">
+								<input type="hidden" name="prodottoId" value="@product.Id" />
+
+								<button class="btn btn-add p-1 pb-2" type="submit"><input type="number" name="quantity" class=" add-product border-0" value="1" min="1" />Aggiungi</button>
+							</form>
 						</div>
 					</div>
 				</div>
 			}
 		</div>
 
-		foreach (var product in Model.Products)
-		{
-			<div class="col-md-4">
-				<div class="card my-2 " style="max-width: 450px">
-					<img class="card-img-top img-thumbnail p-1" src="@product.Immagine">
-					<div class="card-body">
-						<h5 class="card-title fw-bold fs-5">@product.Nome</h5>
-						<p class="card-text"><strong>Prezzo:</strong> @product.Prezzo.ToString("C")</p>
-						<form method="post" asp-controller="Cart" asp-action="Aggiungi">
-							<input type="hidden" name="prodottoId" value="@product.Id" />
-							<input type="number" name="quantity" value="1" min="1" />
-							<button type="submit">Aggiungi al carrello</button>
-						</form>
-						<a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-secondary px-4">Dettagli</a>
-					</div>
-				</div>
-			</div>
-		}
 	}
 	else
 	{
 		<p>Non ci sono prodotti</p>
 	}
+
+
+
+
+
+
 
 </div>
