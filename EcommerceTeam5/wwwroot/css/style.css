@@ -119,18 +119,42 @@
 
 /*CSS FOOTER*/
 
-.footerContainer {
-    padding-top: 15px;
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: white;
+    color: black;
 }
 
-.footerList {
+.footer-column {
+    width: 22%;
+}
+
+.footer-column h3 {
+   font-size: 1.2rem;
+   border-bottom: 2px solid black;
+   padding-bottom: 5px;
+   margin-bottom: 10px;
+}
+
+.footer-column ul {
     list-style-type: none;
+    padding: 0;
 }
 
-    .footerList li a, .privacy a {
-        text-decoration: none;
-        color: inherit;
-    }
+ .footer-column li {
+     margin: 5px 0;
+ }
+
+.footer-column a {
+    color: black;
+    text-decoration: none;
+}
+
+.footer-column a:hover {
+    text-decoration: underline;
+ }
 
 #stiky-nav {
     position: sticky !important;
@@ -174,3 +198,141 @@
 .carousel-control-prev {
     left: -8%
 }
+
+.imgDet {
+    border: 2px solid #ccc;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.borderOrder {
+    border: 1px solid #D2D2D2;
+    background-color: white;
+}
+
+.btn-color {
+    background-color: #F8F8F8 !important;
+}
+
+.btn-color:hover {
+        background-color: black !important;
+        color: white !important;
+}
+
+/*CCS ADMIN PAGE*/
+
+.btnCrea {
+    background-color: dimgray;
+    color: white;
+}
+
+.magazzinoTitle {
+    text-transform: uppercase;
+    font-size: 32px;
+    font-weight: bold;
+    font-style: oblique;
+    letter-spacing: 0.1px;
+}
+
+.Aggiungi {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.1px;
+}
+
+.btnCrea {
+    background-color: transparent;
+    color: black;
+    font-weight: 500;
+}
+
+.imgDet {
+    border: 2px solid #ccc;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-titleAdmin {
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.AggiungiList {
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0.2px;
+}
+
+.btn-details{
+    width: 200px;
+}
+/*csstabellaadmin*/
+.table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.col-immagine {
+    width: 10%;
+}
+
+.col-nome {
+    width: 18%;
+}
+
+.col-descrizione {
+    width: 32%;
+}
+
+.col-prezzo,
+.col-categoria,
+.col-creazione,
+.col-azioni {
+    width: 10%;
+}
+
+.table th, .table td {
+    padding: 0.5rem;
+}
+
+.btnEdit {
+    width: 80%;
+    padding: 5px 10px;
+    margin: 15px;
+    background-color: transparent;
+    color: black;
+    font-weight: 500;
+}
+
+.tableImg {
+    width: 90%;
+    height: 130px;
+    margin: 20px 12px;
+    text-align: center;
+}
+
+.prodName {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 14px;
+    padding-top: 80px;
+}
+
+.tdBorder {
+    border: 1px solid #353639;
+}
+
+.prodDescrizione {
+    font-size: 15px;
+    padding: 10px;
+}
+
+.prodDescrizioneCat {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px;
+    text-transform: uppercase;
+}
+

@@ -27,6 +27,7 @@ namespace EcommerceTeam5.Controllers
 
             var cartItems = new List<CartItem>();
             decimal totaleCarrello = 0;
+            int totaleQuantita = 0;
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -44,6 +45,7 @@ namespace EcommerceTeam5.Controllers
                     {
                         while (await reader.ReadAsync())
                         {
+                            int quantita = reader.GetInt32(6);
                             var item = new CartItem()
                             {
                                 CarrelloID = reader.GetInt32(0),
@@ -57,13 +59,19 @@ namespace EcommerceTeam5.Controllers
 
                             cartItems.Add(item);
                             totaleCarrello += item.Prezzo * item.Quantita;
-                        }
+                            totaleQuantita += quantita;                     }
                     }
                 }
             }
+
+           
+
             ViewData["TotaleCarrello"] = totaleCarrello; // Passa il totale alla view
+            ViewData["TotaleQuantita"] = totaleQuantita;
 
             return View(cartItems);
+            
+
         }
 
         // Aggiungere un prodotto al carrello
@@ -211,7 +219,7 @@ namespace EcommerceTeam5.Controllers
                 await SvuotaCarrello((int)utenteId);
             }
 
-            return RedirectToAction("Index", "Ordini", new { utenteId });
+            return RedirectToAction("Index", "Home", new { utenteId });
         }
 
         // Metodo di supporto per assicurare che l'utente esista

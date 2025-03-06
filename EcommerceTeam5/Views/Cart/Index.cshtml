@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Il tuo Carrello";
 }
 
-<h2 class="text-center m-4"> CARRELLO</h2>
+<h2 class="text-center m-4">CARRELLO</h2>
 
 @if (Model.Count == 0)
 {
@@ -12,75 +12,106 @@
 }
 else
 {
-	<div class="row">
-		<div class="col-sm-12 col-lg-7" >
-			<table class="table ">
-				<thead class="thead-dark">
-					<tr class="text-center">
-						<th>Immagine</th>
-						<th>Prodotto</th>
-						<th>Prezzo Unitario</th>
-						<th>Quantità</th>
-						<th>Totale</th>
-						<th>Azioni</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var item in Model)
-					{
+    <div class="container">
+		<div class="row">
+			<div class="col-sm-12 col-lg-7">
+				<table class="table borderOrder">
+					<thead class="thead-dark">
 						<tr class="text-center">
-							<td>
-								<img src="@item.ImmagineProdotto" alt="@item.NomeProdotto" width="50" height="50">
-							</td>
-							<td>@item.NomeProdotto</td>
-							<td>@item.Prezzo €</td>
-							<td>@item.Quantita</td>
-							
-							<td>@(item.Totale) €</td>
-							<td>
-								<a asp-controller="Cart" asp-action="Rimuovi" asp-route-carrelloId="@item.CarrelloID" asp-route-utenteId="@item.UtenteID" class="btn btn-danger btn-sm">
-									❌ Rimuovi
-								</a>
-							</td>
+							<th>Immagine</th>
+							<th>Prodotto</th>
+							<th>Prezzo</th>
+							<th>Quantità</th>
+							<th>Totale</th>
+							<th></th>
 						</tr>
-					}
-				</tbody>
-			</table>
-		</div>
-		<div class=" col-sm-12 col-lg-4">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Totale Ordine</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><strong>@ViewData["TotaleCarrello"] €</strong></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
 
 
-    <div class="container mt-4">
+							<tr class="text-center align-middle">
+								<td>
+                                    <img src="@item.ImmagineProdotto" alt="@item.NomeProdotto" class="imgDet" width="60" height="60">
+								</td>
+								<td>@item.NomeProdotto</td>
+								<td>@item.Prezzo €</td>
+								<td>@item.Quantita</td>
+
+								<td class=" text-black-50">@(item.Totale) €</td>
+								<td>
+                                    <a class="px-4" asp-controller="Cart" asp-action="Rimuovi" asp-route-carrelloId="@item.CarrelloID" asp-route-utenteId="@item.UtenteID" class="btn bg-transparent btn-sm ">
+                                        <i class="bi bi-trash3 text-black"></i>
+									</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+               
+                
+			</div>
+			
+			<div class="col-sm-12 col-lg-5">
+               
+				<div class="col-12  p-3 borderOrder">
+					<div class=" border-bottom-1 ">
+                        <div class="d-flex justify-content-between">
+							<p class="mb-0">Totale Quantità</p>
+                            <p class=" my-0">@ViewData["TotaleQuantita"] articoli</p>
+							
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class=" mb-0 fw-light">Spedizione </p>
+						    <p class=" mt-0 fw-light">Gratuita</p>
+                        </div>
+						
+                    </div>
+                    
+                    <div class=" d-flex justify-content-between align-items-center border-top mt-3">
+                        <p class=" fs-2 fw-bold mt-3"> Totale Ordine:</p>
+                        <p class=" fs-2 fw-bold mt-3"> @ViewData["TotaleCarrello"] € </p>
+                     </div>
+					
+							
+                          
+						
+				</div>
+			</div>
+		</div>
+		<div class=" d-flex justify-content-between align-items-center">
+			
+            <div>
+				<a href="@Url.Action("Index", "Product")" class="btn bg-transparent border-1 border-secondary rounded-0"> <i class="bi bi-arrow-left-short"></i>  Continua i tuoi acquisti</a>
+            </div>
+
+			
+				<a asp-controller="Cart" asp-action="SvuotaCarrello" asp-route-utenteId="@Model.First().UtenteID" class="btn btn-dark rounded-0">
+					<i class="bi bi-trash3 text-white"></i> Svuota Carrello
+				</a>
+			
+		</div>
+    </div>
+   
+
+    <div class="container p-4 mt-4 bg-white rounded-4">
         <h5>Completa il tuo regalo</h5>
-        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div id="productCarousel" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="row">
                         <div class="col-xl-3 col-sm-6">
-                            <div class="card h-100">
-                                <img src="https://nove25.kleecks-cdn.com/13339-home_default/biglietto-d-auguri-game.jpg" class="card-img-top" alt="Prodotto 1">
+                            <div class="card">
+                                <img src="https://nove25.kleecks-cdn.com/13339-home_default/biglietto-d-auguri-game.jpg" class="card-img-top " alt="Prodotto 1">
                                 <div class="card-body">
                                     <p class="card-text">BIGLIETTO D'AUGURI / GAME</p>
-                                    <p>3,00 €</p>
+                                    <p >3,00 €</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <div class="card">
+                            <div class="card h-100">
                                 <img src="https://nove25.kleecks-cdn.com/10157-home_default/biglietto-nostalgic-merry-christmas.jpg" class="card-img-top" alt="Prodotto 2">
                                 <div class="card-body">
                                     <p class="card-text">BIGLIETTO NOSTALGIC / MERRY CHRISTMAS</p>
@@ -138,7 +169,7 @@ else
                             </div>
                         </div>
                         <div class="col-xl-3 d-none d-xl-block">
-                            <div class="card ">
+                            <div class="card h-100">
                                 <img src="https://nove25.kleecks-cdn.com/13336-home_default/biglietto-d-auguri-friendship.jpg" class="card-img-top" alt="Prodotto 8">
                                 <div class="card-body">
                                     <p class="card-text">BIGLIETTO AUGURI/ FRIENDSHIP</p>
@@ -159,15 +190,36 @@ else
         </div>
     </div>
 
-
+   
+    
     <div class="text-center my-3">
-        <a asp-controller="Cart" asp-action="SvuotaCarrello" asp-route-utenteId="@Model.First().UtenteID" class="btn btn-warning">
-            🗑 Svuota Carrello
-        </a>
-        <a asp-controller="Cart" asp-action="ConfermaOrdine" asp-route-utenteId="@Model.First().UtenteID" class="btn btn-success">
-            ✅ Conferma Ordine
-        </a>
-        <a href="@Url.Action("Index", "Product")" class="btn bg-transparent">🔙Torna alla Vetrina</a>
+
+        <button type="button" class="btn btn-dark rounded-0" data-bs-toggle="modal" data-bs-target="#confirmOrderModal">
+            <i class="bi bi-cart-check-fill text-white"></i> Conferma Ordine
+        </button>
+
+        <div class="modal fade" id="confirmOrderModal" tabindex="-1" aria-labelledby="confirmOrderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmOrderModalLabel">Conferma Ordine</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Totale Quantità:</strong> @ViewData["TotaleQuantita"] articoli</p>
+                        <p><strong>Totale Ordine:</strong> @ViewData["TotaleCarrello"] €</p>
+                        <p>Il tuo ordine è stato ricevuto.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-dark">
+                            <i class="bi bi-cart-check-fill text-white"> Chiudi </i> 
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     
 }
