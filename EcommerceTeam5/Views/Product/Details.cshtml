@@ -1,16 +1,38 @@
 ﻿@model Product
 
-<div class="d-flex justify-content-between">
-    <div class="row d-flex col-5">
+<div class="d-flex justify-content-between container-fluid ms-3">
+    <div class="row d-flex  ms-1">
         <h1>@Model.Nome</h1>
-        <img src="@Model.Immagine" alt="Immagine @Model.Nome" class="img-fluid my-2" style="max-width: 500px; max-height: 580px">
-        <p class="fs-5 my-2"><strong class="fs-5 my-2">Prezzo: </strong>@Model.Prezzo.ToString("C")</p>
+        <div class="col-3">
+           
+            <img src="@Model.Immagine" alt="Immagine @Model.Nome" class="img-fluid imgDet my-2 border border-light shadow" style="max-width: 400px; max-height: 400px">
+        </div>
+        
+        
+        <!--<p>Creato il: @Model.Creazione</p> -->
+    
+    <div class="col-5 mt-5">
+        <div>
+
+        </div>
+        <p class="fs-5 my-1"><strong class="fs-5 my-2">Prezzo: </strong>@Model.Prezzo.ToString("C")</p>
         <p class="fs-5 mb-2"><strong class="fs-5 mb-2">Descrizione: </strong>@Model.Descrizione</p>
         <p>Categoria: @Model.NomeCategoria </p>
-        <!--<p>Creato il: @Model.Creazione</p> -->
-    </div>
+        <form method="post" asp-controller="Cart" asp-action="Aggiungi">
+            <input type="hidden" name="prodottoId" value="@Model.Id" />
 
-    <div class="mt-5 ml-0 col-7">
+            <input type="number" name="quantity" value="1" min="1" />
+            
+                
+            <button class="btn btn-dark text-white p-1 mb-1 rounded-0" type="submit">Aggiungi al carrello</button>
+            
+        </form>
+        <a href="@Url.Action("Index", "Product")" class="btn btn-outline-secondary rounded-0 bg-transparent text-black ms-0 mt-1">Torna alla Vetrina</a>
+        
+    </div>
+    
+
+    <div class="mt-5 ml-0 col-4 ps-4">
         <p><strong>Taglia</strong></p>
         <div class="d-inline-block mb-2">
             <button class="btn btn-outline-primary">17,5cm</button>
@@ -53,16 +75,9 @@
         </p>
     </div>
 </div>
+</div>
 
 
 <!-- Modulo per aggiungere al carrello -->
-<form method="post" asp-controller="Cart" asp-action="Aggiungi">
-    <input type="hidden" name="prodottoId" value="@Model.Id" />
 
-    <input type="number" name="quantity" value="1" min="1" />
-    <button type="submit">Aggiungi al carrello</button>
-</form>
-<div>
-	<a href="@Url.Action("Index", "Product")" class="btn btn-danger mt-3">Torna alla Vetrina</a>
-</div>
 
