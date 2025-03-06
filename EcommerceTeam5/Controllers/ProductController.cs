@@ -50,7 +50,7 @@ namespace EcommerceTeam5.Controllers
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
                                 NomeCategoria = reader.GetString(6),
-                                
+
                             });
                         }
                     }
@@ -89,13 +89,13 @@ namespace EcommerceTeam5.Controllers
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
                                 NomeCategoria = reader.GetString(6),
-                                
+
                             };
                         }
                     }
                 }
             }
-            
+
             if (product == null)
             {
                 return NotFound();
@@ -165,7 +165,7 @@ namespace EcommerceTeam5.Controllers
                         await command.ExecuteNonQueryAsync();
                     }
                 }
-                
+
             }
             else
             {
@@ -195,11 +195,11 @@ namespace EcommerceTeam5.Controllers
                     }
                 }
             }
-             return RedirectToAction("Admin");
-            
+            return RedirectToAction("Admin");
+
         }
 
-        
+
         [HttpPost]
         public async Task<IActionResult> AdminDelete(int Id)
         {
@@ -215,5 +215,67 @@ namespace EcommerceTeam5.Controllers
             }
             return RedirectToAction("Admin");
         }
+
+
+        //visualizzazione di 4 card random accanto ai form modifica/crea della pagina admin
+
+        // ESEMPIO: Metto il metodo qui dentro
+        private List<Product> GetRandomProducts(int count)
+        {
+            var products = new List<Product>();
+
+            string query = @"
+            SELECT TOP (@Count)
+                   p.ProdottoID,
+                   p.Nome,
+                   p.Descrizione,
+                   p.Prezzo,
+                   p.ImageURL,
+                   p.Creato,
+                   c.NomeCategoria
+            FROM Prodotti p
+            INNER JOIN Categorie c ON p.CategoriaID = c.CategoriaID
+            ORDER BY NEWID();";
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Count", count);
+                conn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var prodotto = new Product
+                        {
+                            Id = reader.GetInt32(0),
+                            Nome = reader.GetString(1),
+                            Descrizione = reader.GetString(2),
+                            Prezzo = reader.GetDecimal(3),
+                            Immagine = reader.GetString(4),
+                            Creazione = reader.GetDateTime(5),
+                            NomeCategoria = reader.GetString(6)
+                        };
+                        products.Add(prodotto);
+                    }
+                }
+            }
+
+            return products;
+        }
+
+        [HttpGet]
+        public IActionResult AdminView()
+        {
+            var randomProducts = GetRandomProducts(6);
+
+            var magazzino = new Magazzino
+            {
+                Products = randomProducts
+            };
+
+            return View(magazzino);
+        }
     }
-}
+} 

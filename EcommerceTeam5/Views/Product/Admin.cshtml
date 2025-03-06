@@ -1,103 +1,142 @@
-﻿@model EcommerceTeam5.Models.Magazzino
+﻿@model EcommerceTeam5.Models.Magazzino;
 
 @{
     ViewData["Title"] = "Admin - Gestione Prodotti";
 }
-<h1>Admin - Gestione Prodotti</h1>
 
-<!-- Form per Creazione/Modifica -->
-<div id="createEditSection">
-    <h2 id="formTitle">Crea Nuovo Prodotto</h2>
-    <form id="productForm" asp-action="Admin" method="post">
-        <input type="hidden" name="Id" id="Id"  />
-        <div class="form-group">
-            <label for="Nome">Nome</label>
-            <input type="text" name="Nome" id="Nome" class="form-control" required />
+<div class="container-fluid">
+    <h1 class="magazzinoTitle text-center my-4">Gestione Magazzino</h1>
+    <hr class="my-4 pb-2 mx-0"/>
+
+    <div class="row mx-3">
+        <!-- Form Crea/Modifica a sinistra -->
+        <div class="col-md-6">
+            <div id="createEditSection" class="mx-3">
+                <h2 id="formTitle" class="my-2 pb-2 Aggiungi">Aggiungi Nuovo Prodotto</h2>
+                <form id="productForm" asp-action="Admin" method="post">
+                    <input type="hidden" name="Id" id="Id"  />
+                    <div class="form-group">
+                        <label for="Nome">Nome Prodotto</label>
+                        <input type="text" name="Nome" id="Nome" class="form-control my-2" style=" max-width: 700px" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Descrizione">Descrizione Prodotto</label>
+                        <textarea name="Descrizione" id="Descrizione" class="form-control my-2" style=" max-width: 700px" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="Prezzo">Prezzo</label>
+                        <input type="number" name="Prezzo" id="Prezzo" class="form-control my-2" style=" max-width: 700px" step="0.01" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Immagine">URL Immagine</label>
+                        <input type="text" name="Immagine" id="Immagine" class="form-control my-2" style=" max-width: 700px" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Creazione">Data Inserimento</label>
+                        <input type="datetime-local" name="Creazione" id="Creazione" class="form-control my-2" style=" max-width: 700px" />
+                    </div>
+                    <div class="form-group">
+                        <label for="CategoriaID">Categoria</label>
+                        <select name="CategoriaID" id="CategoriaID" class="form-control my-2" style=" max-width: 700px" required>
+                            <option value="0" > Seleziona Categoria</option>
+                            <option value="1">Bracciali</option>
+                            <option value="2">Anelli</option>
+                            <option value="3">Collane</option>
+                            <option value="4">Altro</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btnCrea border border-dark rounded-0 px-4 mt-4 mb-2 me-2 align-items-center " id="submitBtn">Crea</button>
+                    <button type="button" class="btn btnCrea border border-dark rounded-0 px-3 mt-4 mb-2 mx-3 align-items-center" style="display:none" id="cancelEdit">Annulla Modifica</button>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="Descrizione">Descrizione</label>
-            <textarea name="Descrizione" id="Descrizione" class="form-control" required></textarea>
+
+        <!--sezione destra Card con alcuni prodotti-->
+        <div class="col-md-6">
+            <h3 class="my-2 pb-2 Aggiungi">In Magazzino</h3>
+            <div class="row row-cols-1 row-cols-md-3 g-1 mt-2 ">
+
+
+                @foreach(var product in Model.Products.Take(6))
+                {
+                    <div class="col">
+                        <div class="card h-100 my-2 border border-2 imgDet" style="max-width: 210px; max-height: 270px;">
+                            <img src="@product.Immagine" class="card-img-top pb-0 mb-0" style="max-height: 200px;" alt="@product.Nome" />
+                            <div class="card-body ps-2 py-0 ">
+                                <p class="card-titleAdmin">@product.Nome</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-        <div class="form-group">
-            <label for="Prezzo">Prezzo</label>
-            <input type="number" name="Prezzo" id="Prezzo" class="form-control" step="0.01" required />
-        </div>
-        <div class="form-group">
-            <label for="Immagine">Immagine (URL)</label>
-            <input type="text" name="Immagine" id="Immagine" class="form-control" required />
-        </div>
-        <div class="form-group">
-            <label for="Creazione">Data Creazione</label>
-            <input type="datetime-local" name="Creazione" id="Creazione" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="CategoriaID">Categoria</label>
-            <select name="CategoriaID" id="CategoriaID" class="form-control" required >
-                <option value="0" > Seleziona Categoria</option>
-                <option value="1">Bracciali</option>
-                <option value="2">Anelli</option>
-                <option value="3">Collane</option>
-                <option value="4">Altro</option>
-                </select>
-        </div>
-        <button type="submit" class="btn btn-primary" id="submitBtn">Crea</button>
-        <button type="button" class="btn btn-secondary" id="cancelEdit" style="display:none;">Annulla Modifica</button>
-    </form>
+    </div>
+
+
+    <hr class="my-4 pb-2 mx-0" />
+
+<!-- Tabella Prodotti -->
+  <div class="row mx-4">
+        <h2 id="formTitle" class="my-2 pb-2 AggiungiList">Tutti i prodotti in magazzino</h2>
+    <div class="col-md-12">
+            <table class="table table-fixed">
+                <thead>
+                    <tr class="py-3 tdBorder">
+                        <th class="col-immagine">Immagine</th>
+                        <th class="col-nome">Nome</th>
+                        <th class="col-descrizione">Descrizione</th>
+                        <th class="col-prezzo">Prezzo</th>
+                        <th class="col-categoria">Categoria</th>
+                        <th class="col-creazione">Data Creazione</th>
+                        <th class="col-azioni">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prod in Model.Products)
+                    {
+                        <tr class="tdBorder" style="max-height: 120px">
+                            <td><img src="@prod.Immagine" alt="@prod.NomeCategoria" class="tableImg" /></td>
+							<td><p class="prodName"> @prod.Nome</p></td>
+							<td><p class="prodDescrizione"> @prod.Descrizione </p></td>
+                            <td><p class="prodDescrizione fw-bold">@prod.Prezzo.ToString("C") </p></td>
+                            <td><p class="prodDescrizioneCat">@prod.NomeCategoria</p></td>
+                            <td><p class="prodDescrizione">@prod.Creazione.ToString("dd/MM/yyyy")</p></td>
+                            
+                            <td class="align-top" style="height: 100%;">
+								  <div class="d-flex flex-column justify-content-between h-100">
+                                    <button type="button" class="btn btnEdit border border-dark rounded-0 align-items-center"
+                                        data-id="@prod.Id"
+                                        data-nome="@prod.Nome"
+                                        data-descrizione="@prod.Descrizione"
+                                        data-prezzo="@prod.Prezzo"
+                                        data-immagine="@prod.Immagine"
+                                        data-creazione="@prod.Creazione.ToString("yyyy-MM-ddTHH:mm")"
+                                        data-categoriaid="@prod.CategoriaID">
+                                       Modifica
+                                    </button>
+
+                                    <button type="button" class="btn btnEdit border border-dark rounded-0 align-items-center" data-id="@prod.Id">Cancella</button>
+							   </div>
+							</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+    
+    </div>
+  
+  </div>
+
+
+          <form id="deleteForm" asp-action="AdminDelete" method="post" style="display:none;">
+              <input type="hidden" name="Id" id="deleteId" />
+          </form>
+
+
 </div>
 
-<hr />
 
-<!-- Griglia Prodotti -->
-<div>
-    <h2>Lista Prodotti</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Immagine</th>
-                <th>Nome</th>
-                <th>Descrizione</th>
-                <th>Prezzo</th>
-                <th>Categoria</th>
-                <th>Data Creazione</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var prod in Model.Products)
-            {
-                <tr>
-                    <td>
-                        <img src=@prod.Immagine alt=@prod.NomeCategoria width="50" height="50"/>
-                    </td>
-                    <td>@prod.Nome</td>
-                    <td>@prod.Descrizione</td>
-                    <td>@prod.Prezzo.ToString("C")</td>
-                    <td>@prod.NomeCategoria</td>
-					<td>@prod.Creazione.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        <button type="button" class="btn btn-primary btnEdit"
-                                data-id="@prod.Id"
-                                data-nome="@prod.Nome"
-                                data-descrizione="@prod.Descrizione"
-                                data-prezzo="@prod.Prezzo"
-                                data-immagine="@prod.Immagine"
-                                data-creazione="@prod.Creazione.ToString("yyyy-MM-ddTHH:mm")"
-                                data-categoriaid="@prod.CategoriaID">
-                            Modifica
-                        </button>
-                        <button type="button" class="btn btn-danger btnDelete" data-id="@prod.Id">
-                            Cancella
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-<form id="deleteForm" asp-action="AdminDelete" method="post" style="display:none;">
-    <input type="hidden" name="Id" id="deleteId" />
-</form>
 
 @section Scripts {
     <script>
