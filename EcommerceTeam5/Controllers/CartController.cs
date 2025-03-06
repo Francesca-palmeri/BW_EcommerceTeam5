@@ -153,7 +153,7 @@ namespace EcommerceTeam5.Controllers
                 await connection.OpenAsync();
 
                 string selectQuery = @"
-                    SELECT ProdottoID, Quantita, Prezzo 
+                    SELECT  Quantita, Prezzo 
                     FROM Carrello INNER JOIN Prodotti ON Carrello.ProdottoID = Prodotti.ProdottoID
                     WHERE UtenteID = @UtenteID";
 
