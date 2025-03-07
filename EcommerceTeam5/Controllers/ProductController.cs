@@ -20,8 +20,8 @@ namespace EcommerceTeam5.Controllers
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        
-        public async Task<IActionResult> Index()
+        // Azione per visualizzare tutti i prodotti, con funzionalità di ricerca
+        public async Task<IActionResult> Index(string searchTerm) 
         {
             var productsList = new Magazzino()
             {
@@ -32,10 +32,31 @@ namespace EcommerceTeam5.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT ProdottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria FROM Prodotti INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID;";
+
+                string query;
+                if (!string.IsNullOrEmpty(searchTerm)) 
+                {
+                    query = @"
+                        SELECT ProdottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria 
+                        FROM Prodotti 
+                        INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID 
+                        WHERE Nome LIKE @searchTerm OR Descrizione LIKE @searchTerm OR NomeCategoria LIKE @searchTerm;";
+                }
+                else
+                {
+                    query = @"
+                        SELECT ProdottoId, Nome, Descrizione, Prezzo, ImageURL, Creato, NomeCategoria 
+                        FROM Prodotti 
+                        INNER JOIN Categorie ON Prodotti.CategoriaID = Categorie.CategoriaID;";
+                }
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    if (!string.IsNullOrEmpty(searchTerm)) // ADDED:  parametro se searchTerm è valorizzato
+                    {
+                        command.Parameters.AddWithValue("@searchTerm", "%" + searchTerm + "%");
+                    }
+
                     await using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
@@ -49,12 +70,13 @@ namespace EcommerceTeam5.Controllers
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
                                 NomeCategoria = reader.GetString(6),
-                                
                             });
                         }
                     }
                 }
             }
+
+            ViewBag.SearchTerm = searchTerm; // ADDED: passo il termine di ricerca alla view
 
             return View(productsList);
         }
@@ -88,13 +110,12 @@ namespace EcommerceTeam5.Controllers
                                 Immagine = reader.GetString(4),
                                 Creazione = reader.GetDateTime(5),
                                 NomeCategoria = reader.GetString(6),
-                                
                             };
                         }
                     }
                 }
             }
-            
+
             if (product == null)
             {
                 return NotFound();
@@ -141,7 +162,7 @@ namespace EcommerceTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Admin(Product product)
         {
-            //Se l'Id è 0, si tratta di una creazione
+            // Se l'Id è 0, si tratta di una creazione
             if (product.Id == 0)
             {
                 if (product.Creazione == DateTime.MinValue)
@@ -164,7 +185,6 @@ namespace EcommerceTeam5.Controllers
                         await command.ExecuteNonQueryAsync();
                     }
                 }
-                
             }
             else
             {
@@ -194,11 +214,9 @@ namespace EcommerceTeam5.Controllers
                     }
                 }
             }
-             return RedirectToAction("Admin");
-            
+            return RedirectToAction("Admin");
         }
 
-        
         [HttpPost]
         public async Task<IActionResult> AdminDelete(int Id)
         {
@@ -214,7 +232,5 @@ namespace EcommerceTeam5.Controllers
             }
             return RedirectToAction("Admin");
         }
-
     }
-
 }
