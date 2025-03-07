@@ -2,17 +2,31 @@
     background-color: #F8F8F8 !important;
 }
 
-#stiky-nav {
+/*#stiky-nav {
     position: sticky !important;
     top: auto !important;
     z-index: 1000 !important;
-}
+}*/
 .btn-color {
     background-color: antiquewhite ;
 }
 .bg-img {
     background-color: black   ;
 }
+
+.nav-link {
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: black;
+}
+.cercaNav {
+    width: 170px;
+    margin: 20px 15px;
+}
+
+
 
 /*CSS HOMEPAGE*/
 .background {
@@ -147,12 +161,12 @@
      margin: 5px 0;
  }
 
-.footer-column a {
+.footer-column a, .privacy a {
     color: black;
     text-decoration: none;
 }
 
-.footer-column a:hover {
+.footer-column a:hover, .privacy a:hover {
     text-decoration: underline;
  }
 
@@ -217,6 +231,34 @@
         background-color: black !important;
         color: white !important;
 }
+
+.AggiungiDetProd {
+    text-transform: uppercase;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+
+.AggiungiDetTitle {
+    text-transform: uppercase;
+    font-size: 38px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+}
+
+/*cssDettagli*/
+
+.AggiungiDet {
+    text-transform: uppercase;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+
+.DescrizioneDet {
+    font-size: 18px;
+}
+
 
 /*CCS ADMIN PAGE*/
 
