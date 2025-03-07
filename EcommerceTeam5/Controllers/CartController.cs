@@ -66,7 +66,7 @@ namespace EcommerceTeam5.Controllers
 
            
 
-            ViewData["TotaleCarrello"] = totaleCarrello; // Passa il totale alla view
+            ViewData["TotaleCarrello"] = totaleCarrello; 
             ViewData["TotaleQuantita"] = totaleQuantita;
 
             return View(cartItems);

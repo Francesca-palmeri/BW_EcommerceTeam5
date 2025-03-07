@@ -15,13 +15,12 @@ namespace EcommerceTeam5.Controllers
     {
         private readonly string _connectionString;
 
-        // Iniezione della configurazione tramite il costruttore
         public ProductController(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        // Azione per visualizzare tutti i prodotti
+        
         public async Task<IActionResult> Index()
         {
             var productsList = new Magazzino()
@@ -29,7 +28,7 @@ namespace EcommerceTeam5.Controllers
                 Products = new List<Product>()
             };
 
-            // Connessione al database per ottenere i prodotti
+           
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -66,7 +65,7 @@ namespace EcommerceTeam5.Controllers
         {
             Product product = null;
 
-            // Connessione al database per ottenere i dettagli del prodotto
+            
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
