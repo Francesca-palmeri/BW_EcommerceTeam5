@@ -8,7 +8,72 @@
 
 @if (Model.Count == 0)
 {
-	<p class="text-center text-muted">Il carrello è vuoto.</p>
+    <div class="container">
+		<div class="row">
+			<div class="col-sm-12 col-lg-7">
+				<table class="table borderOrder">
+					<thead class="thead-dark">
+						<tr class="text-center">
+							<th>Immagine</th>
+							<th>Prodotto</th>
+							<th>Prezzo</th>
+							<th>Quantità</th>
+							<th>Totale</th>
+							<th></th>
+						</tr>
+					</thead>
+				<tbody>
+					
+	    
+     
+
+                     <tr class="text-center align-middle">
+                             <td></td>
+                             <td></td>
+                             <td><p class="text-center text-muted">Il carrello è vuoto.</p> </td>
+                             <td></td>
+                             <td></td>
+                     </tr>
+                </tbody>
+                </table>
+            </div>
+     
+
+    <div class="col-sm-12 col-lg-5">
+
+         <div class="col-12  p-3 borderOrder">
+                 <div class=" border-bottom-1 ">
+                     <div class="d-flex justify-content-between">
+                         <p class="mb-0">Totale Quantità</p>
+                         <p class=" my-0">@ViewData["TotaleQuantita"] articoli</p>
+
+                     </div>
+                     <div class="d-flex justify-content-between">
+                      <p class=" mb-0 fw-light">Spedizione </p>
+                     </div>
+
+                 </div>
+
+             <div class=" d-flex justify-content-between align-items-center border-top mt-3">
+                <p class=" fs-2 fw-bold mt-3"> Totale Ordine:</p>
+                 <p class=" fs-2 fw-bold mt-3"> @ViewData["TotaleCarrello"] € </p>
+             </div>
+
+
+
+          </div>
+    </div>
+       
+            <div class=" d-flex justify-content-start align-items-center">
+
+                 <div>
+                    <a href="@Url.Action("Index", "Product")" class="btn bg-transparent border-1 border-secondary rounded-0"> <i class="bi bi-arrow-left-short"></i>  Continua i tuoi acquisti</a>
+                 </div>
+            </div>
+
+        </div>
+    </div>
+
 }
 else
 {

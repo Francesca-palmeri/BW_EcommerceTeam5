@@ -34,14 +34,14 @@
 							{
 								var product = Model.Products[productIndex];
 								<div class="col-md-3 p-1">
-									<div class="card px-0 my-2 border-0 imgDet" style="max-width: 250px">
+									<div class="card px-0 my-2 border-0 imgDet" style="max-width: 250px; height: 445px;">
 										<img class="card-img-top  p-0" src="@product.Immagine" alt="@product.Nome" />
-										<div class="card-body p-1">
+										<div class="card-body p-2">
 
-											<div class=" text-start">
+											<div class=" text-start px-2">
 												<p class="card-title  fw-bold">@product.Nome</p>
 											</div>
-											<div class="text-start">
+											<div class="text-start px-2">
 												<p class="card-text  "><strong> </strong> @product.Prezzo.ToString("C")</p>
 											</div>
 
@@ -91,7 +91,7 @@
 				{
 
 					<div class="col-md-3 ">
-						<div class="card my-2 border-0 imgDet" style="max-width: 230px; height: 445px;">
+						<div class="card my-4 border-0 imgDet" style="max-width: 230px; height: 445px;">
 							<img class="card-img-top p-0" src="@product.Immagine" />
 							<div class="card-body p-1">
 								<div class=" mx-2">
