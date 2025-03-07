@@ -10,7 +10,7 @@
 
     <div class="row mx-3">
         <!-- Form Crea/Modifica a sinistra -->
-        <div class="col-md-6">
+        <div class="col-md-6" id="TornaSu">
             <div id="createEditSection" class="mx-3">
                 <h2 id="formTitle" class="my-2 pb-2 Aggiungi">Aggiungi Nuovo Prodotto</h2>
                 <form id="productForm" asp-action="Admin" method="post">
@@ -104,7 +104,7 @@
 
                             <td class="align-top" style="height: 100%;">
                                 <div class="d-flex flex-column justify-content-between h-100">
-                                    <button type="button" class="btn btnEdit border border-dark rounded-0 align-items-center"
+                                    <a href="#TornaSu" class="btn btnEdit border border-dark rounded-0 align-items-center"
                                             data-id="@prod.Id"
                                             data-nome="@prod.Nome"
                                             data-descrizione="@prod.Descrizione"
@@ -113,9 +113,9 @@
                                             data-creazione="@prod.Creazione.ToString("yyyy-MM-ddTHH:mm")"
                                             data-categoriaid="@prod.CategoriaID">
                                         Modifica
-                                    </button>
+                                    </a>
 
-                                    <button type="button" class="btn btnEdit border border-dark rounded-0 align-items-center" data-id="@prod.Id">Cancella</button>
+                                    <button type="button" asp-action="AdminDelete" class="btn btnDelete border border-dark rounded-0 align-items-center" data-id="@prod.Id">Cancella</button>
                                 </div>
                             </td>
                         </tr>
