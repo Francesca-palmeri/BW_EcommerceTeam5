@@ -2,8 +2,8 @@
 
 <div class="d-flex justify-content-between container-fluid ms-3">
     <div class="row d-flex  ms-1">
-        <h1>@Model.Nome</h1>
-        <div class="col-sm-2 col-xl-3">
+        <h1 class="AggiungiDet mt-3 py-3">@Model.Nome</h1>
+        <div class="col-sm-2 col-xl-3 mt-2">
 
             <img src="@Model.Immagine" alt="Immagine @Model.Nome" class="img-fluid imgDet my-2 border border-light shadow">
             <div class=" ">
@@ -18,13 +18,13 @@
             <div>
             </div>
             <p class="fs-5 my-1"><strong class="fs-5 my-2">Prezzo: </strong>@Model.Prezzo.ToString("C")</p>
-            <p class="fs-5 mb-2"><strong class="fs-5 mb-2">Descrizione: </strong>@Model.Descrizione</p>
-            <p>Categoria: @Model.NomeCategoria </p>
+            <p class="my-2 DescrizioneDet"><strong class="my-2">Descrizione: </strong>@Model.Descrizione</p>
+            <p class="my-4 DescrizioneDet">Categoria: @Model.NomeCategoria </p>
           
-            <form method="post" class="text-start" asp-controller="Cart" asp-action="Aggiungi">
+            <form method="post" class="text-start mt-4" asp-controller="Cart" asp-action="Aggiungi">
                 <input type="hidden" name="prodottoId" value="@Model.Id" />
                 <input type="number" class="add-product border-0" name="quantita" value="1" min="1" id="quantita-@Model.Id" />
-				<button class="btn btn-dark text-white p-1 mb-1 rounded-0" type="submit">Aggiungi al carrello</button>
+				<button class="btn btn-dark text-white align-items-center px-3 py-1 mb-1 rounded-0" type="submit">Aggiungi al carrello</button>
             </form>
            
             
